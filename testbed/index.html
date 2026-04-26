@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sumulafly API Testbed</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo">◈</span>
+      <span>Sumulafly API Testbed</span>
+    </div>
+    <div class="auth-status">
+      <span id="auth-label" class="pill pill-off">Logged out</span>
+      <button id="logout-btn" class="btn-ghost" type="button">Logout</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <nav class="sidebar">
+      <a href="#health" class="nav-link active">Health</a>
+      <a href="#auth" class="nav-link">Auth</a>
+      <a href="#users" class="nav-link">Users</a>
+      <a href="#upload" class="nav-link">Upload</a>
+      <a href="#sessions" class="nav-link">Sessions</a>
+      <a href="#chat" class="nav-link">Chat</a>
+      <a href="#visualize" class="nav-link">Visualize</a>
+      <a href="#cart" class="nav-link">Cart</a>
+      <a href="#products" class="nav-link">Products</a>
+    </nav>
+
+    <div class="content">
+      <!-- HEALTH -->
+      <section id="health" class="card">
+        <h2>Health</h2>
+        <div class="actions">
+          <button data-action="healthz">GET /healthz</button>
+          <button data-action="readyz">GET /readyz</button>
+        </div>
+        <div class="response" data-response="health"></div>
+      </section>
+
+      <!-- AUTH -->
+      <section id="auth" class="card">
+        <h2>Auth</h2>
+        <div class="grid-2">
+          <form id="register-form">
+            <h3>POST /auth/register</h3>
+            <input name="email" placeholder="email" required />
+            <input name="password" placeholder="password (≥8)" type="password" required minlength="8" />
+            <input name="full_name" placeholder="full name (optional)" />
+            <button type="submit">Register</button>
+          </form>
+
+          <form id="login-form">
+            <h3>POST /auth/login</h3>
+            <input name="email" placeholder="email" required />
+            <input name="password" placeholder="password" type="password" required />
+            <button type="submit">Login</button>
+          </form>
+        </div>
+        <form id="refresh-form" class="inline-form">
+          <h3>POST /auth/refresh</h3>
+          <button type="submit">Rotate tokens</button>
+        </form>
+        <div class="response" data-response="auth"></div>
+      </section>
+
+      <!-- USERS -->
+      <section id="users" class="card">
+        <h2>Users</h2>
+        <div class="actions">
+          <button data-action="me-get">GET /users/me</button>
+        </div>
+        <form id="me-patch-form">
+          <h3>PATCH /users/me</h3>
+          <input name="full_name" placeholder="full_name" />
+          <input name="avatar_url" placeholder="avatar_url" />
+          <button type="submit">Update</button>
+        </form>
+        <div class="response" data-response="users"></div>
+      </section>
+
+      <!-- UPLOAD -->
+      <section id="upload" class="card">
+        <h2>Upload</h2>
+        <form id="upload-form">
+          <h3>POST /upload/room-image</h3>
+          <input type="file" id="upload-file" accept="image/jpeg,image/png,image/webp" required />
+          <button type="submit">Upload</button>
+        </form>
+        <div class="current">
+          <span>Last uploaded image_id:</span>
+          <code id="last-image-id">—</code>
+          <button id="copy-image-id" class="btn-ghost" type="button">copy</button>
+        </div>
+        <div id="uploaded-preview" class="image-preview"></div>
+        <div class="response" data-response="upload"></div>
+      </section>
+
+      <!-- SESSIONS -->
+      <section id="sessions" class="card">
+        <h2>Sessions</h2>
+        <div class="actions">
+          <button data-action="sessions-list">GET /sessions/</button>
+        </div>
+        <form id="session-create-form">
+          <h3>POST /sessions/</h3>
+          <input name="title" placeholder="title" required />
+          <input name="room_image_id" placeholder="room_image_id (optional; uses last upload)" />
+          <button type="submit">Create</button>
+        </form>
+
+        <div class="current">
+          <span>Active session:</span>
+          <select id="active-session"></select>
+          <button id="session-reload" class="btn-ghost" type="button">refresh</button>
+        </div>
+
+        <form id="session-patch-form">
+          <h3>PATCH /sessions/{active}</h3>
+          <input name="title" placeholder="new title" />
+          <select name="status">
+            <option value="">(no status change)</option>
+            <option value="active">active</option>
+            <option value="archived">archived</option>
+          </select>
+          <button type="submit">Patch</button>
+        </form>
+
+        <div class="actions">
+          <button data-action="session-delete" class="btn-danger">DELETE /sessions/{active}</button>
+        </div>
+        <div class="response" data-response="sessions"></div>
+      </section>
+
+      <!-- CHAT -->
+      <section id="chat" class="card">
+        <h2>Chat <small>(uses active session)</small></h2>
+
+        <form id="chat-analyze-form" class="inline-form">
+          <h3>POST /chat/analyze</h3>
+          <input type="file" id="analyze-file" accept="image/jpeg,image/png,image/webp" />
+          <button type="submit">Analyze room</button>
+        </form>
+
+        <div id="chat-window" class="chat-window"></div>
+
+        <form id="chat-send-form" class="chat-composer">
+          <input name="content" placeholder="Talk to Sumi about your room…" required />
+          <button type="submit">Send</button>
+          <button type="button" id="chat-reload" class="btn-ghost">reload history</button>
+        </form>
+        <div class="response" data-response="chat"></div>
+      </section>
+
+      <!-- VISUALIZE -->
+      <section id="visualize" class="card">
+        <h2>Visualize</h2>
+        <form id="visualize-form">
+          <h3>POST /visualize/</h3>
+          <input name="session_id" placeholder="session_id (uses active)" />
+          <input name="room_image_id" placeholder="room_image_id (uses last upload)" />
+
+          <fieldset style="border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin:4px 0;">
+            <legend style="font-size:12px;color:var(--text-dim);padding:0 6px;">Single product</legend>
+            <input name="product_id" placeholder="product_id (UUID) — for single product" />
+          </fieldset>
+
+          <fieldset style="border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin:4px 0;">
+            <legend style="font-size:12px;color:var(--text-dim);padding:0 6px;">Multi-product (overrides single)</legend>
+            <textarea name="product_ids" placeholder="Paste multiple UUIDs, one per line&#10;Same category → separate renders&#10;Different categories → single composite scene"
+              rows="4" style="width:100%;font-family:monospace;font-size:12px;resize:vertical;background:var(--bg-input,var(--bg-card));color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;box-sizing:border-box;"></textarea>
+          </fieldset>
+
+          <input name="placement" placeholder="Placement direction (optional) — e.g. left wall, centre, corner" />
+          <button type="submit">Generate</button>
+        </form>
+
+        <!-- selected-from-chat area -->
+        <div id="selected-products-bar" style="display:none;margin-top:8px;padding:10px 14px;background:var(--bg-input,rgba(255,255,255,0.04));border:1px solid var(--border);border-radius:6px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;font-weight:600;">Selected for visualization (<span id="selected-count">0</span>)</span>
+            <button id="clear-selection" class="btn-ghost" type="button" style="font-size:12px;">Clear</button>
+          </div>
+          <div id="selected-products-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <input id="selected-placement" placeholder="Placement direction (optional)" style="flex:1;min-width:180px;" />
+            <button id="visualize-selected-btn" class="btn" type="button">Preview selected in room</button>
+          </div>
+        </div>
+
+        <div id="visualize-preview" class="image-preview"></div>
+        <div class="response" data-response="visualize"></div>
+      </section>
+
+
+      <!-- CART -->
+      <section id="cart" class="card">
+        <h2>Cart</h2>
+        <div class="actions">
+          <button data-action="cart-get">GET /cart/</button>
+          <button data-action="cart-clear" class="btn-danger">DELETE /cart/</button>
+        </div>
+        <form id="cart-add-form">
+          <h3>POST /cart/</h3>
+          <input name="product_id" placeholder="product_id (UUID)" required />
+          <input name="quantity" type="number" min="1" max="10" value="1" required />
+          <button type="submit">Add</button>
+        </form>
+        <div id="cart-table"></div>
+        <div class="response" data-response="cart"></div>
+      </section>
+
+      <!-- PRODUCTS -->
+      <section id="products" class="card">
+        <h2>Products</h2>
+        <form id="products-search-form" class="inline-form">
+          <h3>GET /products/search</h3>
+          <input name="q" placeholder="e.g. velvet sofa" required />
+          <input name="limit" type="number" value="10" min="1" max="50" />
+          <button type="submit">Semantic search</button>
+        </form>
+
+        <form id="products-filter-form" class="inline-form">
+          <h3>GET /products/</h3>
+          <input name="category" placeholder="category contains…" />
+          <input name="max_price" type="number" placeholder="max_price" />
+          <input name="limit" type="number" value="20" min="1" max="100" />
+          <input name="offset" type="number" value="0" min="0" />
+          <button type="submit">Filter</button>
+        </form>
+
+        <form id="products-get-form" class="inline-form">
+          <h3>GET /products/{id}</h3>
+          <input name="id" placeholder="product_id (UUID)" required />
+          <button type="submit">Fetch</button>
+        </form>
+
+        <div id="products-grid" class="product-grid"></div>
+        <div class="response" data-response="products"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="app.js?v=2"></script>
+</body>
+</html>

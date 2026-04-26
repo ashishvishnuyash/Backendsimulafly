@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+!.env.example
+*.sqlite
+*.db
+data/amazon_products.csv
+.idea/
+.vscode/
+.claude/

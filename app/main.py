@@ -1,0 +1,104 @@
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+from fastapi import FastAPI, Request, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from starlette.middleware.base import BaseHTTPMiddleware
+
+from app.core.config import get_settings
+from app.core.database import engine, ping_db
+from app.core.logging import configure_logging, get_logger
+from app.core.rate_limit import limiter
+from app.routers import auth, cart, chat, products, sessions, upload, users, visualization
+
+settings = get_settings()
+configure_logging()
+log = get_logger("app.main")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    log.info("startup", env=settings.ENV, ai_configured=settings.ai_configured)
+    yield
+    await engine.dispose()
+    log.info("shutdown")
+
+
+def create_app() -> FastAPI:
+    docs_url = None if settings.is_production else "/docs"
+    redoc_url = None if settings.is_production else "/redoc"
+
+    app = FastAPI(
+        title="Sumulafly Backend",
+        version="1.0.0",
+        docs_url=docs_url,
+        redoc_url=redoc_url,
+        lifespan=lifespan,
+    )
+
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.ALLOWED_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    app.add_middleware(RequestSizeLimitMiddleware, max_bytes=settings.MAX_REQUEST_BYTES)
+
+    api_prefix = "/api/v1"
+    app.include_router(auth.router, prefix=api_prefix)
+    app.include_router(users.router, prefix=api_prefix)
+    app.include_router(sessions.router, prefix=api_prefix)
+    app.include_router(chat.router, prefix=api_prefix)
+    app.include_router(visualization.router, prefix=api_prefix)
+    app.include_router(cart.router, prefix=api_prefix)
+    app.include_router(products.router, prefix=api_prefix)
+    app.include_router(upload.router, prefix=api_prefix)
+
+    # Static testbed UI (dev helper — access at /testbed/)
+    testbed_dir = Path(__file__).resolve().parent.parent / "testbed"
+    if testbed_dir.is_dir():
+        app.mount("/testbed", StaticFiles(directory=str(testbed_dir), html=True), name="testbed")
+
+    @app.get("/", include_in_schema=False)
+    async def root():
+        return RedirectResponse(url="/testbed/" if testbed_dir.is_dir() else "/docs")
+
+    @app.get("/healthz", tags=["health"])
+    async def healthz():
+        return {"status": "ok"}
+
+    @app.get("/readyz", tags=["health"])
+    async def readyz():
+        db_ok = await ping_db()
+        return JSONResponse(
+            {"status": "ok" if db_ok else "degraded", "db": db_ok},
+            status_code=200 if db_ok else 503,
+        )
+
+    return app
+
+
+class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app, max_bytes: int) -> None:
+        super().__init__(app)
+        self.max_bytes = max_bytes
+
+    async def dispatch(self, request: Request, call_next):
+        cl = request.headers.get("content-length")
+        if cl and cl.isdigit() and int(cl) > self.max_bytes:
+            return JSONResponse(
+                {"detail": f"request body too large (max {self.max_bytes} bytes)"},
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            )
+        return await call_next(request)
+
+
+app = create_app()
