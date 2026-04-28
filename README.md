@@ -103,6 +103,8 @@ See `.env.example` for the full list. Notable entries:
 | Chat | `POST /chat/analyze`, `POST /chat/`, `GET /chat/{session_id}/messages` |
 | Visualize | `POST /visualize/` |
 | Cart | `GET|POST /cart/`, `PATCH|DELETE /cart/{item_id}`, `DELETE /cart/` |
+| Saved | `GET|POST /saved/`, `PATCH|DELETE /saved/{item_id}`, `DELETE /saved/by-product/{product_id}` |
+| Notifications | `GET /notifications/?unread_only=`, `POST /notifications/{id}/read`, `POST /notifications/read-all`, `DELETE /notifications/{id}` |
 | Products | `GET /products/search?q=`, `GET /products/?category=&max_price=&limit=&offset=`, `GET /products/{id}` |
 | Upload | `POST /upload/room-image`, `GET /upload/room-image/{id}` |
 | Health | `GET /healthz`, `GET /readyz` |

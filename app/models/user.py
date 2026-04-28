@@ -27,3 +27,5 @@ class User(Base):
     sessions = relationship("DesignSession", back_populates="user", cascade="all, delete-orphan")
     cart_items = relationship("CartItem", back_populates="user", cascade="all, delete-orphan")
     room_images = relationship("RoomImage", back_populates="owner", cascade="all, delete-orphan")
+    saved_items = relationship("SavedItem", back_populates="user", cascade="all, delete-orphan")
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")

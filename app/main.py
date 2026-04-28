@@ -13,7 +13,18 @@ from app.core.config import get_settings
 from app.core.database import engine, ping_db
 from app.core.logging import configure_logging, get_logger
 from app.core.rate_limit import limiter
-from app.routers import auth, cart, chat, products, sessions, upload, users, visualization
+from app.routers import (
+    auth,
+    cart,
+    chat,
+    notifications,
+    products,
+    saved,
+    sessions,
+    upload,
+    users,
+    visualization,
+)
 
 settings = get_settings()
 configure_logging()
@@ -59,6 +70,8 @@ def create_app() -> FastAPI:
     app.include_router(chat.router, prefix=api_prefix)
     app.include_router(visualization.router, prefix=api_prefix)
     app.include_router(cart.router, prefix=api_prefix)
+    app.include_router(saved.router, prefix=api_prefix)
+    app.include_router(notifications.router, prefix=api_prefix)
     app.include_router(products.router, prefix=api_prefix)
     app.include_router(upload.router, prefix=api_prefix)
 

@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     AZURE_IMAGE_EDIT_DEPLOYMENT: str = ""
     AZURE_IMAGE_GEN_DEPLOYMENT: str = ""
 
-    ALLOWED_ORIGINS: Annotated[List[str], NoDecode] = ["http://localhost:3000"]
+    ALLOWED_ORIGINS: Annotated[List[str], NoDecode] = ["*"]
 
     RATE_LIMIT_PER_MINUTE: int = 60
     CHAT_RATE_LIMIT_PER_MINUTE: int = 20
