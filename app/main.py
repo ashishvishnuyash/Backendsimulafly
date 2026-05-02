@@ -21,6 +21,7 @@ from app.routers import (
     products,
     saved,
     sessions,
+    styles,
     upload,
     users,
     visualization,
@@ -44,7 +45,7 @@ def create_app() -> FastAPI:
     redoc_url = None if settings.is_production else "/redoc"
 
     app = FastAPI(
-        title="Sumulafly Backend",
+        title="simulafly Backend",
         version="1.0.0",
         docs_url=docs_url,
         redoc_url=redoc_url,
@@ -73,7 +74,18 @@ def create_app() -> FastAPI:
     app.include_router(saved.router, prefix=api_prefix)
     app.include_router(notifications.router, prefix=api_prefix)
     app.include_router(products.router, prefix=api_prefix)
+    app.include_router(styles.router, prefix=api_prefix)
     app.include_router(upload.router, prefix=api_prefix)
+
+    # Static style images — served at /static/styles/img_NNN.jpg.
+    # The `styles` router builds absolute URLs pointing here.
+    styles_dir = Path(__file__).resolve().parent.parent / "data" / "styles"
+    if styles_dir.is_dir():
+        app.mount(
+            "/static/styles",
+            StaticFiles(directory=str(styles_dir)),
+            name="style-images",
+        )
 
     # Static testbed UI (dev helper — access at /testbed/)
     testbed_dir = Path(__file__).resolve().parent.parent / "testbed"

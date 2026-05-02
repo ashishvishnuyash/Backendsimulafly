@@ -1,6 +1,6 @@
-# Sumulafly Backend
+# simulafly Backend
 
-Production-grade FastAPI backend for Sumulafly — a mobile-first AI interior design PWA.
+Production-grade FastAPI backend for simulafly — a mobile-first AI interior design PWA.
 Scan → Consult → RAG Suggest → Visualize → Cart → Buy, over a real 3,110-row Amazon
 India furniture catalog, powered by Azure AI Foundry (GPT-4o, gpt-image-1 edit,
 text-embedding-3-small).
@@ -41,8 +41,8 @@ You need a local PostgreSQL 16 with the `pgvector` extension. A few easy options
 Once Postgres is running, create the database and user (from `psql` as superuser):
 
 ```sql
-CREATE USER sumulafly WITH PASSWORD 'sumulafly';
-CREATE DATABASE sumulafly OWNER sumulafly;
+CREATE USER simulafly WITH PASSWORD 'simulafly';
+CREATE DATABASE simulafly OWNER simulafly;
 ```
 
 ## Setup
@@ -105,6 +105,7 @@ See `.env.example` for the full list. Notable entries:
 | Cart | `GET|POST /cart/`, `PATCH|DELETE /cart/{item_id}`, `DELETE /cart/` |
 | Saved | `GET|POST /saved/`, `PATCH|DELETE /saved/{item_id}`, `DELETE /saved/by-product/{product_id}` |
 | Notifications | `GET /notifications/?unread_only=`, `POST /notifications/{id}/read`, `POST /notifications/read-all`, `DELETE /notifications/{id}` |
+| Styles | `GET /styles/`, `GET /styles/{slug}` (catalog of editorial design templates; images at `/static/styles/img_NNN.jpg`) |
 | Products | `GET /products/search?q=`, `GET /products/?category=&max_price=&limit=&offset=`, `GET /products/{id}` |
 | Upload | `POST /upload/room-image`, `GET /upload/room-image/{id}` |
 | Health | `GET /healthz`, `GET /readyz` |

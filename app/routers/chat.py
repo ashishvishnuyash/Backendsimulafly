@@ -53,10 +53,31 @@ async def analyze(
     if not session.room_image_id:
         session.room_image_id = image.id
 
+    style_directive = ""
+    if body.style_name:
+        vibe = f" — {body.style_vibe}" if body.style_vibe else ""
+        style_directive = (
+            f"\n\nThe user has selected the '{body.style_name}' aesthetic{vibe} "
+            "as the design direction. Ground your description and follow-up "
+            "in this style: which existing pieces work with it, which gaps the "
+            "style would let you fill, and what one decision the user should "
+            "make first to commit to it."
+        )
+        # Persist on the session so /chat/ turns can reference it.
+        if hasattr(session, "profile_snapshot"):
+            snap = dict(session.profile_snapshot or {})
+            snap["selected_style"] = {
+                "slug": body.style_slug,
+                "name": body.style_name,
+                "vibe": body.style_vibe,
+            }
+            session.profile_snapshot = snap
+
     prompt = (
         "You are Sumi, an interior designer. Describe this room in 2-3 sentences "
         "(style, lighting, key pieces, empty space). Then ask the user ONE concrete "
         "clarifying question about what they want to add or change. Keep it warm and brief."
+        + style_directive
     )
     image_b64 = base64.b64encode(image.data).decode()
     vision_message = HumanMessage(
@@ -73,7 +94,12 @@ async def analyze(
     reply = response.content if isinstance(response.content, str) else str(response.content)
 
     session.context_summary = reply
-    user_msg = Message(session_id=session.id, role="user", content="[room scan attached]", image_id=image.id)
+    # Surface the chosen style as the user's first turn — the chat UI shows
+    # this above the room photo as a small chip ("Style: Mid-Century Modern").
+    user_content = (
+        f"Style: {body.style_name}" if body.style_name else "[room scan attached]"
+    )
+    user_msg = Message(session_id=session.id, role="user", content=user_content, image_id=image.id)
     assistant_msg = Message(session_id=session.id, role="assistant", content=reply)
     db.add_all([user_msg, assistant_msg])
     await db.commit()

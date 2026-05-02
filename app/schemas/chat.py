@@ -11,6 +11,12 @@ class ChatAnalyzeRequest(BaseModel):
     session_id: uuid.UUID
     image_base64: str = Field(min_length=10)
     media_type: str = Field(default="image/jpeg", max_length=64)
+    # Optional style template the user picked from the home discovery feed.
+    # `style_name` is what the chat surfaces to the user; `style_vibe` is the
+    # short editorial blurb the AI uses to ground its analysis.
+    style_slug: str | None = Field(default=None, max_length=64)
+    style_name: str | None = Field(default=None, max_length=128)
+    style_vibe: str | None = Field(default=None, max_length=512)
 
 
 class ChatRequest(BaseModel):
