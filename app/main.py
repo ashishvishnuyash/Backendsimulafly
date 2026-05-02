@@ -10,7 +10,7 @@ from slowapi.errors import RateLimitExceeded
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.config import get_settings
-from app.core.database import engine, ping_db
+from app.core.database import SessionLocal, engine, ping_db
 from app.core.logging import configure_logging, get_logger
 from app.core.rate_limit import limiter
 from app.routers import (
@@ -35,6 +35,19 @@ log = get_logger("app.main")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     log.info("startup", env=settings.ENV, ai_configured=settings.ai_configured)
+
+    # First-run bootstrap of the editorial style catalog. No-op if the table
+    # already has rows. Failures here are logged but don't block startup —
+    # the app is usable without styles, just shows an empty discovery feed.
+    try:
+        from app.services.style_seed import seed_if_empty
+        async with SessionLocal() as db:
+            inserted = await seed_if_empty(db)
+        if inserted:
+            log.info("style_seed_inserted", count=inserted)
+    except Exception as e:  # noqa: BLE001
+        log.warning("style_seed_skipped", error=str(e))
+
     yield
     await engine.dispose()
     log.info("shutdown")
@@ -77,9 +90,15 @@ def create_app() -> FastAPI:
     app.include_router(styles.router, prefix=api_prefix)
     app.include_router(upload.router, prefix=api_prefix)
 
-    # Static style images — served at /static/styles/img_NNN.jpg.
+    # Static style images — served at /static/styles/imageN.jpg.
+    # Source: `data/style_templates/images/` (compressed from PNG → JPEG).
     # The `styles` router builds absolute URLs pointing here.
-    styles_dir = Path(__file__).resolve().parent.parent / "data" / "styles"
+    styles_dir = (
+        Path(__file__).resolve().parent.parent
+        / "data"
+        / "style_templates"
+        / "images"
+    )
     if styles_dir.is_dir():
         app.mount(
             "/static/styles",

@@ -5,6 +5,7 @@ from app.models.product import Product
 from app.models.room_image import RoomImage
 from app.models.saved_item import SavedItem
 from app.models.session import DesignSession
+from app.models.style import Style
 from app.models.user import User
 
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
     "RoomImage",
     "SavedItem",
     "Notification",
+    "Style",
 ]

@@ -1,0 +1,405 @@
+{
+  "total": 50,
+  "templates": [
+    {
+      "id": 1,
+      "category": "Living Room",
+      "name": "Modern Indian Elegance",
+      "vibe_check": "Rich walnut woods, subtle brass accents, and warm jewel-toned upholstery.",
+      "description": "This design bridges rich cultural heritage with the demands of contemporary urban living. Utilizes a sturdy L-shaped sectional sofa in a warm jewel tone upholstered in high-performance, stain-resistant fabric. The focal point is a solid walnut or teak wood coffee table. Subtle brass accents through sleek floor lamps, closed wooden cabinets, and a washable traditional motif rug.",
+      "image": "images/image1.jpg"
+    },
+    {
+      "id": 2,
+      "category": "Living Room",
+      "name": "Warm Minimalist",
+      "vibe_check": "Clutter-free spaces, soft curved furniture, and earthy beige or terracotta tones.",
+      "description": "Designed for the busy urban professional seeking calm. Soft, curved furniture like a low-profile beige or terracotta sofa. Floating media consoles free up floor space. Earthy tones and warm whites reflect natural light in compact flats. One or two large impactful art pieces instead of numerous small decor items.",
+      "image": "images/image2.jpg"
+    },
+    {
+      "id": 3,
+      "category": "Living Room",
+      "name": "Contemporary Luxe",
+      "vibe_check": "High-gloss marble flooring, fluted wall panels, and metallic gold or champagne trims.",
+      "description": "Caters to the aspirational homeowner for strong visual statements when entertaining. High-gloss vitrified tiles or marble flooring, plush neutral velvet sofa. Fluted wooden panels or metallic wallpapers on walls. Nesting coffee tables with gold metallic frames. Layered warm cove lighting and a modern geometric chandelier.",
+      "image": "images/image3.jpg"
+    },
+    {
+      "id": 4,
+      "category": "Living Room",
+      "name": "Mid-Century Modern",
+      "vibe_check": "Iconic tapered furniture legs, mustard accents, and clean, functional lines.",
+      "description": "Popular among younger first-time homebuyers with clean, functional lines and vintage appeal. Furniture lifted on tapered wooden legs creates an illusion of larger floor plan. Streamlined tufted sofa in mustard yellow or deep forest green. Medium-to-dark walnut tones in sleek sideboards. Geometric patterns in throw pillows and rugs.",
+      "image": "images/image4.jpg"
+    },
+    {
+      "id": 5,
+      "category": "Living Room",
+      "name": "Japandi",
+      "vibe_check": "Minimalist light oak wood, slatted wall panels, and calming neutral fabrics.",
+      "description": "Ultimate fusion of Japanese minimalism and Scandinavian functionality. Light oak or ash wood tones with bright, airy feel. Low-slung fabric sofas in oatmeal or soft grey. Vertical slatted wood room dividers allow light and cross-ventilation. Wabi-sabi ceramic vases, dried branches, and raw linen curtains.",
+      "image": "images/image5.jpg"
+    },
+    {
+      "id": 6,
+      "category": "Living Room",
+      "name": "Boho Chic / Earthy",
+      "vibe_check": "Rattan textures, macramé details, layered rugs, and abundant indoor plants.",
+      "description": "Free-spirited aesthetic with natural textures and layered eclectic elements. Features rattan and cane furniture, macramé wall hangings, and an abundance of indoor plants. Layered rugs in earthy tones ground the space in boho warmth.",
+      "image": "images/image6.jpg"
+    },
+    {
+      "id": 7,
+      "category": "Living Room",
+      "name": "Heritage / Chettinad Twist",
+      "vibe_check": "Intricately carved dark wood, block-print cushions, and traditional Indian art.",
+      "description": "Celebrates India's deep cultural roots with intricately carved dark wood furniture. Block-print and ethnic fabric cushions complement traditional Indian artwork and brass artifacts. A rich, storytelling aesthetic rooted in the craftsmanship of Chettinad heritage.",
+      "image": "images/image7.jpg"
+    },
+    {
+      "id": 8,
+      "category": "Living Room",
+      "name": "Tropical / Urban Oasis",
+      "vibe_check": "Cane furniture, bold botanical prints, and vibrant emerald greens.",
+      "description": "Brings the lush outdoors inside with cane and rattan furniture. Bold botanical prints on cushions and wallpaper, complemented by vibrant emerald green plants. Creates a fresh, breezy indoor jungle feel perfect for tropical climates.",
+      "image": "images/image8.jpg"
+    },
+    {
+      "id": 9,
+      "category": "Living Room",
+      "name": "Pastel & Scandinavian",
+      "vibe_check": "Breezy light woods, soft blush pinks or mint greens, and airy window treatments.",
+      "description": "A soft, calming aesthetic that blends Scandinavian simplicity with pastel warmth. Light wood furniture paired with blush pink, mint green, or lavender accents. Sheer, airy curtains flood the space with natural light for a refreshing, feminine elegance.",
+      "image": "images/image9.jpg"
+    },
+    {
+      "id": 10,
+      "category": "Living Room",
+      "name": "Industrial Loft",
+      "vibe_check": "Exposed brick textures, distressed leather seating, and matte black fixtures.",
+      "description": "Raw urban aesthetic inspired by converted warehouses. Exposed brick textures, distressed leather sofas, and matte black metal fixtures. Edison bulb pendants and open metal shelving complete this edgy, characterful style.",
+      "image": "images/image10.jpg"
+    },
+    {
+      "id": 11,
+      "category": "Bedroom",
+      "name": "5-Star Hotel Vibe",
+      "vibe_check": "Massive upholstered headboards, warm cove lighting, and plush velvet fabrics.",
+      "description": "Transforms the primary bedroom into a premium sanctuary. Massive plush upholstered headboard wider than the bed. Dimmable LED cove lighting and elegant pendant lights over bedside tables. Floor-to-ceiling sliding wardrobe doors with tinted glass. Crisp white high-thread-count linens with layered textured throw blankets.",
+      "image": "images/image11.jpg"
+    },
+    {
+      "id": 12,
+      "category": "Bedroom",
+      "name": "Modern Minimalist",
+      "vibe_check": "Handleless wardrobes, floating side tables, and crisp white linens.",
+      "description": "Ideal for smaller urban bedrooms maximizing space. Platform bed with built-in hydraulic storage. Wall-mounted floating side tables. Handle-less push-to-open wardrobes blending into walls. Sheer roller blinds and a breathable, visually organized space.",
+      "image": "images/image12.jpg"
+    },
+    {
+      "id": 13,
+      "category": "Bedroom",
+      "name": "Warm & Earthy",
+      "vibe_check": "Baked clay tones, linen fabrics, and warm, sun-drenched aesthetics.",
+      "description": "Embraces natural, breathable materials with a sun-drenched palette. Textured paint in terracotta or warm mustard, natural wood or cane headboard. Breathable organic cotton bedding in rust, olive, or beige. Terracotta planters with Snake Plants and handwoven durrie rug.",
+      "image": "images/image13.jpg"
+    },
+    {
+      "id": 14,
+      "category": "Bedroom",
+      "name": "Smart Space-Saver",
+      "vibe_check": "Integrated study desks, hidden storage beds, and highly efficient layouts.",
+      "description": "Engineered for compact apartments where every inch serves dual purpose. Integrated pull-out drawers or trundle bed. Customized study desk built into the wardrobe unit. Vertical floating bookshelves keep the floor clear. Bright light-reflecting whites and pale woods prevent cramped feeling.",
+      "image": "images/image14.jpg"
+    },
+    {
+      "id": 15,
+      "category": "Bedroom",
+      "name": "Modern Royal Indian",
+      "vibe_check": "Four-poster beds, rich silk fabrics, and intricate floral wallpaper accents.",
+      "description": "Modernizes the opulence of Indian palaces for contemporary premium apartments. Modernized four-poster or heavily carved teak bedframe. Metallic-accented floral wallpaper or custom Jali panel backlit with warm LEDs. Silk or brocade throw pillows, heavy floor-pooling curtains, vintage brass bedside lamps.",
+      "image": "images/image15.jpg"
+    },
+    {
+      "id": 16,
+      "category": "Bedroom",
+      "name": "Zen Sanctuary",
+      "vibe_check": "Low-profile beds, bamboo textures, and an ultra-calming, distraction-free layout.",
+      "description": "A deeply restful retreat inspired by Japanese minimalism. Low-profile platform bed with natural bamboo or light wood textures. Ultra-calming neutral palette with zero visual clutter. Soft diffused lighting and natural material curtains create meditative serenity.",
+      "image": "images/image16.jpg"
+    },
+    {
+      "id": 17,
+      "category": "Bedroom",
+      "name": "Boutique Hotel Luxe",
+      "vibe_check": "Massive upholstered headboards, warm cove lighting, and plush velvet fabrics.",
+      "description": "Brings premium boutique hotel aesthetics to the home. Oversized velvet or suede headboard, warm dimmable LED cove lighting. Opulent layered bedding with a curated mix of textures and tones. Statement pendant lights and a built-in window seat complete the luxury.",
+      "image": "images/image17.jpg"
+    },
+    {
+      "id": 18,
+      "category": "Bedroom",
+      "name": "Cozy Reading Nook",
+      "vibe_check": "Layered throw blankets, warm reading lamps, and overstuffed accent chairs.",
+      "description": "A warm, literary haven that combines sleeping and reading in a single nurturing space. Plush armchair with a warm brass floor lamp in the corner. Layered throw blankets, warm-toned rugs, and floating wooden bookshelves create a cozy, literary atmosphere.",
+      "image": "images/image18.jpg"
+    },
+    {
+      "id": 19,
+      "category": "Bedroom",
+      "name": "Classic Victorian Twist",
+      "vibe_check": "Elegant wall wainscoting, muted pastel colors, and vintage-inspired bedside lamps.",
+      "description": "A romantic blend of Victorian elegance and modern comfort. Wall wainscoting in soft muted pastels, vintage-inspired bedside lamps with fabric shades. Ornate mirror frames, delicate floral textiles, and carved wooden furniture bring timeless romance.",
+      "image": "images/image19.jpg"
+    },
+    {
+      "id": 20,
+      "category": "Bedroom",
+      "name": "Moody & Dramatic",
+      "vibe_check": "Deep navy blue or charcoal accent walls, warm amber lighting, and rich wood tones.",
+      "description": "An intensely atmospheric bedroom designed for bold personalities. Deep navy or charcoal accent wall, warm amber lighting, and rich dark wood tones. Heavy velvet drapes block all external light, creating a theater-like, sensory retreat.",
+      "image": "images/image20.jpg"
+    },
+    {
+      "id": 21,
+      "category": "Kitchen",
+      "name": "Sleek & Seamless (Handleless)",
+      "vibe_check": "Seamless high-gloss cabinets, integrated appliances, and ultra-easy-to-clean surfaces.",
+      "description": "Designed for heavy-duty Indian cooking while maintaining a pristine look. Handleless high-gloss Acrylic or PU cabinets via G-profile channels. Built-in appliances flush with pantry units. High-suction chimney seamlessly integrated. Stain-resistant engineered quartz countertops in pure white or grey.",
+      "image": "images/image21.jpg"
+    },
+    {
+      "id": 22,
+      "category": "Kitchen",
+      "name": "Classic Wood Finish",
+      "vibe_check": "Solid teak or veneer finishes, intricate brass hardware, and warm granite countertops.",
+      "description": "Timeless aesthetic with traditional durability. High-quality marine ply with teak, walnut, or oak veneer sealed against humidity. Brass or matte black hardware on heavy-duty drawers. Dark premium Indian granite countertop forgiving to turmeric stains. Frosted glass inserts in upper units.",
+      "image": "images/image22.jpg"
+    },
+    {
+      "id": 23,
+      "category": "Kitchen",
+      "name": "Modern Two-Tone",
+      "vibe_check": "Navy blue lower cabinets, crisp white upper cabinets, and a bright quartz countertop.",
+      "description": "Breaks visual monotony with a designer touch. Dark navy blue, forest green, or charcoal lower matte laminate cabinets. Bright crisp white or light ash wood upper cabinets. Geometric or subway tile backsplash ties colors together. Conceals wear on bottom, maintains bright airy feeling at eye level.",
+      "image": "images/image23.jpg"
+    },
+    {
+      "id": 24,
+      "category": "Kitchen",
+      "name": "Premium Marble Look",
+      "vibe_check": "Heavy marble-veined backsplashes, under-cabinet profile lighting, and gold accents.",
+      "description": "A showstopper for premium open-plan homes. Marble-patterned engineered quartz or sintered stone on countertops and walls as continuous backsplash. Soft matte neutral cabinetry in cashmere or light taupe. Under-cabinet LED profile lighting highlights stone texture. Subtle gold or champagne hardware.",
+      "image": "images/image24.jpg"
+    },
+    {
+      "id": 25,
+      "category": "Kitchen",
+      "name": "Smart Modular Efficiency",
+      "vibe_check": "Floor-to-ceiling storage, magic pull-out corners, and highly optimized counter space.",
+      "description": "Ultimate solution for compact urban kitchens maximizing storage ergonomics. Magic corner pull-outs and carousel units for deep corners. Dedicated tall pantry with pull-out wire baskets for groceries. Heavy-duty tandem drawer system partitioned for Indian spice jars. Light reflective finishes make tight space feel larger.",
+      "image": "images/image25.jpg"
+    },
+    {
+      "id": 26,
+      "category": "Kitchen",
+      "name": "Two-Tone Contemporary",
+      "vibe_check": "Navy blue lower cabinets, crisp white upper cabinets, and a bright quartz countertop.",
+      "description": "A bold aesthetic that combines contrasting colors for a vibrant, modern kitchen. Deep colored lowers paired with light uppers create visual balance. Geometric tile backsplash and quartz countertops complete the contemporary design.",
+      "image": "images/image26.jpg"
+    },
+    {
+      "id": 27,
+      "category": "Kitchen",
+      "name": "Classic Shaker Style",
+      "vibe_check": "Paneled cabinet doors, warm undertones, and a cozy, inviting family kitchen feel.",
+      "description": "Timeless shaker-style cabinetry with paneled doors in warm wood tones. Cozy, inviting atmosphere perfect for family kitchens. Warm granite or butcher block countertops complement the classic style.",
+      "image": "images/image27.jpg"
+    },
+    {
+      "id": 28,
+      "category": "Kitchen",
+      "name": "Industrial Edge",
+      "vibe_check": "Concrete-textured laminates, matte black handles, and open metal shelving.",
+      "description": "Raw, urban kitchen aesthetic. Concrete-textured laminate surfaces, matte black hardware, and open metal shelving. Edison bulb pendant lights and a stainless steel apron sink complete the industrial loft vibe.",
+      "image": "images/image28.jpg"
+    },
+    {
+      "id": 29,
+      "category": "Kitchen",
+      "name": "Pastel & Bright",
+      "vibe_check": "Soft mint or butter-yellow cabinets, adding a cheerful, airy vibe to cooking spaces.",
+      "description": "Brings cheerful, airy energy to the kitchen. Soft mint, butter yellow, or blush pink cabinet tones paired with white countertops. Light and uplifting color palette that makes cooking feel joyful and bright.",
+      "image": "images/image29.jpg"
+    },
+    {
+      "id": 30,
+      "category": "Kitchen",
+      "name": "Wood & Grey Fusion",
+      "vibe_check": "Slate grey matte finishes paired with warm walnut wood lofts for a modern contrast.",
+      "description": "Balances cool and warm tones in a sophisticated modern contrast. Slate grey matte lower cabinets paired with warm walnut wood upper lofts. Creates a grounded, editorial aesthetic with excellent visual depth.",
+      "image": "images/image30.jpg"
+    },
+    {
+      "id": 31,
+      "category": "Bathroom",
+      "name": "Spa-Like Retreat",
+      "vibe_check": "Earthy stone-finish tiles, rain shower panels, and warm recessed cove lighting.",
+      "description": "Transforms standard bathroom into a premium wellness space. Large-format anti-skid vitrified tiles with natural stone or slate texture. Clear frameless glass partition with ceiling-mounted rain shower. Warm recessed cove lighting behind mirrors and ceiling niches. Wood-laminate vanity with pristine white countertop washbasin.",
+      "image": "images/image31.jpg"
+    },
+    {
+      "id": 32,
+      "category": "Bathroom",
+      "name": "Classic Marble Elegance",
+      "vibe_check": "High-gloss Italian marble, brass or gold fixtures, and large backlit vanity mirrors.",
+      "description": "Gold standard for premium Indian bathrooms with timeless luxury. High-gloss Italian marble or quality marble-look porcelain tiles. Brushed brass or gold fixtures for stunning contrast against marble veining. Grand vanity with massive backlit LED mirror. Wall-hung commode with concealed cistern.",
+      "image": "images/image32.jpg"
+    },
+    {
+      "id": 33,
+      "category": "Bathroom",
+      "name": "Clean & Neutral (Contemporary)",
+      "vibe_check": "Beige or soft grey vitrified tiles, floating vanities, and clean, easy-to-wipe lines.",
+      "description": "Highly practical and universally appealing for easy maintenance. Soft neutral palette in beige, light grey, or greige matte anti-skid tiles. Floating wall-mounted vanity. Chrome or brushed nickel fixtures resistant to hard-water scaling. Simple straight lines with minimal grout for mold prevention.",
+      "image": "images/image33.jpg"
+    },
+    {
+      "id": 34,
+      "category": "Bathroom",
+      "name": "Space-Saving Modern",
+      "vibe_check": "Wall-hung commodes, hidden storage behind mirrors, and bright lighting to expand the space.",
+      "description": "Engineered for compact apartment bathrooms with visual expansion tricks. Wall-hung commode and corner narrow-depth washbasin. Mirror doubles as medicine cabinet, floating drawer beneath sink. Large-format bright white tiles with minimal grout lines. Sliding glass shower door saves clearance space.",
+      "image": "images/image34.jpg"
+    },
+    {
+      "id": 35,
+      "category": "Bathroom",
+      "name": "Warm Stone & Earth",
+      "vibe_check": "Warm baked-clay tones, textured wall finishes, and matte copper hardware.",
+      "description": "Raw tactile warmth with earthy, durable aesthetic. Textured earthy tiles mimicking terracotta, sandstone, or travertine. Matte black or antique copper hardware. Moisture-resistant marine ply vanity with dark wood grain. Built-in shower niche with contrasting patterned tile for storage.",
+      "image": "images/image35.jpg"
+    },
+    {
+      "id": 36,
+      "category": "Bathroom",
+      "name": "Minimalist Monochrome",
+      "vibe_check": "Matte black fittings, crisp white subway tiles, and sleek, frameless glass partitions.",
+      "description": "Striking black-and-white contrast for a bold, modern aesthetic. Matte black fittings and fixtures against crisp white subway tiles. Frameless glass partitions maintain openness while the monochrome palette delivers dramatic sophistication.",
+      "image": "images/image36.jpg"
+    },
+    {
+      "id": 37,
+      "category": "Bathroom",
+      "name": "Tropical Oasis",
+      "vibe_check": "Wood-finish porcelain tiles, humidity-loving indoor plants, and pebble floor accents.",
+      "description": "Brings resort-style tropical energy to the bathroom. Wood-finish porcelain tiles, pebble floor accents in the wet zone, and humidity-loving plants like ferns and peace lilies. Creates a lush, spa-like oasis inspired by Bali and Goa resorts.",
+      "image": "images/image37.jpg"
+    },
+    {
+      "id": 38,
+      "category": "Bathroom",
+      "name": "Moroccan Vibe",
+      "vibe_check": "Patterned encaustic floor tiles, arched mirror frames, and antique brass accents.",
+      "description": "Rich Moroccan-inspired aesthetic with intricate pattern work. Patterned encaustic floor tiles, arched or ornate mirror frames, and antique brass fittings. Deep jewel tones and detailed tilework create a richly atmospheric bathing experience.",
+      "image": "images/image38.jpg"
+    },
+    {
+      "id": 39,
+      "category": "Bathroom",
+      "name": "Neo-Classic Elegance",
+      "vibe_check": "Tile wainscoting, ornate mirror frames, and a freestanding tub (space permitting).",
+      "description": "Timeless neo-classical elegance with ornate detailing. Tile wainscoting on lower walls, ornate mirror frames, and a freestanding clawfoot tub where space allows. Warm toned marble and gold accents project refined, classical luxury.",
+      "image": "images/image39.jpg"
+    },
+    {
+      "id": 40,
+      "category": "Bathroom",
+      "name": "Brutalist Chic",
+      "vibe_check": "Exposed concrete-look finishes, raw textures, and heavy matte black fixtures.",
+      "description": "Bold brutalist aesthetic that embraces raw, industrial textures. Exposed concrete-look wall and floor finishes with heavy matte black fixtures. Rugged and architectural, this design makes a strong statement for those who love bold, unapologetic design.",
+      "image": "images/image40.jpg"
+    },
+    {
+      "id": 41,
+      "category": "Dining Room",
+      "name": "Traditional Carved Wood",
+      "vibe_check": "Carved solid teak wood tables, brass tableware accents, and traditional Indian artwork.",
+      "description": "Celebrates the heart of Indian hospitality for large family gatherings. Heavy solid teak or rosewood dining table with turned legs or traditional carvings. Robust high-backed wooden chairs with washable ethnic fabric upholstery. Matching wooden buffet sideboard. Warm brass or antique bronze chandelier.",
+      "image": "images/image41.jpg"
+    },
+    {
+      "id": 42,
+      "category": "Dining Room",
+      "name": "Open Concept Dining",
+      "vibe_check": "Dining that flows into the living area with matching wood tones and low-profile seating.",
+      "description": "Suited for modern apartments where dining sits between living room and kitchen. Slim low-profile table with sleek metal base and glass or light wood top. Lightweight chairs or space-saving bench. Single striking modern pendant light defines the dining zone.",
+      "image": "images/image42.jpg"
+    },
+    {
+      "id": 43,
+      "category": "Dining Room",
+      "name": "Modern Glass & Glam",
+      "vibe_check": "Marble or onyx-top table, plush velvet dining chairs, and a modern crystal chandelier.",
+      "description": "Sophisticated upscale restaurant vibe for home entertaining. Premium tinted glass or high-gloss onyx top on sculptural geometric gold base. Curved-back jewel-toned velvet chairs with metallic legs. Floor-to-ceiling tinted mirror reflects a dazzling crystal chandelier.",
+      "image": "images/image43.jpg"
+    },
+    {
+      "id": 44,
+      "category": "Dining Room",
+      "name": "Simple & Warm Wood",
+      "vibe_check": "Light oak dining table, upholstered chairs, and a striking, singular pendant light.",
+      "description": "Practical everyday design focused on durability and family functionality. Sturdy medium-toned oak or walnut table with scratch-resistant matte finish. Ergonomic chairs with wipe-clean leatherette seats. Simple woven table runner. Two or three warm minimalist dome pendants for even illumination.",
+      "image": "images/image44.jpg"
+    },
+    {
+      "id": 45,
+      "category": "Dining Room",
+      "name": "Cozy Corner Dining",
+      "vibe_check": "Round tables to save space, armless chairs, and a floating buffet unit for crockery.",
+      "description": "Ultimate solution for compact flats without a dedicated dining room. Round dining table eliminates sharp corners and improves traffic flow. Built-in L-shaped banquet bench with hidden storage against the walls. Intimate wall sconce or small pendant light creates a café-like atmosphere.",
+      "image": "images/image45.jpg"
+    },
+    {
+      "id": 46,
+      "category": "Study Room / Home Office",
+      "name": "The Executive Setup",
+      "vibe_check": "Dark wood executive desk, ergonomic leather chair, and a built-in bookshelf backdrop.",
+      "description": "Serious, authoritative space for focused work and video calls. Heavy dark-wood executive desk commanding the center. Premium ergonomic high-back leather chair. Floor-to-ceiling wooden bookshelves or wall wainscoting as video call backdrop. Classic brass task lamp and tufted leather guest chair.",
+      "image": "images/image46.jpg"
+    },
+    {
+      "id": 47,
+      "category": "Study Room / Home Office",
+      "name": "Smart Wall Desk (Compact)",
+      "vibe_check": "White floating desk, invisible wire management, and distraction-free neutral walls.",
+      "description": "For urban apartments where a separate office isn't possible. Floating wall-mounted desk with zero floor space impact. Vertical floating shelves above for organized storage. Hidden grommets and cable trays for wire management. Slim ergonomic mesh chair tucks under when workday ends.",
+      "image": "images/image47.jpg"
+    },
+    {
+      "id": 48,
+      "category": "Study Room / Home Office",
+      "name": "Nature-Inspired Office",
+      "vibe_check": "Desk facing natural light, abundant indoor plants, and raw wood textures to reduce stress.",
+      "description": "Biophilic design principles to reduce work-from-home stress. Desk positioned to face a window maximizing natural sunlight. Raw light-toned wood furniture with visible grain. Abundant air-purifying indoor plants on desk, shelves, and floor planters. Calming sage green, warm beige, and soft white palette.",
+      "image": "images/image48.jpg"
+    },
+    {
+      "id": 49,
+      "category": "Study Room / Home Office",
+      "name": "Distraction-Free Zone",
+      "vibe_check": "White floating desk, invisible wire management, and distraction-free neutral walls.",
+      "description": "Minimalist template for absolute unbroken concentration. Stark white or soft grey walls with zero decorative art. Sleek white or light wood desk with integrated invisible cable management. Closed handleless cabinets ensure nothing visible to distract. Sleek modern LED desk bar for even, shadow-free illumination.",
+      "image": "images/image49.jpg"
+    },
+    {
+      "id": 50,
+      "category": "Study Room / Home Office",
+      "name": "The Reading Room",
+      "vibe_check": "Floor-to-ceiling wooden bookshelves, a reading armchair, and warm brass task lamps.",
+      "description": "Aspirational space doubling as a home office and quiet library retreat. Walls lined with custom floor-to-ceiling wooden bookshelves. Dedicated reading corner with plush armchair or leather recliner and warm brass floor lamp. Heavy textured curtains block city noise. Plush Persian-style rug absorbs acoustics for deep intellectual quiet.",
+      "image": "images/image50.jpg"
+    }
+  ]
+}

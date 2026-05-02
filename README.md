@@ -105,7 +105,7 @@ See `.env.example` for the full list. Notable entries:
 | Cart | `GET|POST /cart/`, `PATCH|DELETE /cart/{item_id}`, `DELETE /cart/` |
 | Saved | `GET|POST /saved/`, `PATCH|DELETE /saved/{item_id}`, `DELETE /saved/by-product/{product_id}` |
 | Notifications | `GET /notifications/?unread_only=`, `POST /notifications/{id}/read`, `POST /notifications/read-all`, `DELETE /notifications/{id}` |
-| Styles | `GET /styles/`, `GET /styles/{slug}` (catalog of editorial design templates; images at `/static/styles/img_NNN.jpg`) |
+| Styles | `GET /styles/`, `GET /styles/{slug}` (public reads); `POST /styles/`, `PATCH /styles/{slug}`, `DELETE /styles/{slug}?hard=` (admin — `X-Admin-Key` header). Images served at `/static/styles/imageNN.jpg` |
 | Products | `GET /products/search?q=`, `GET /products/?category=&max_price=&limit=&offset=`, `GET /products/{id}` |
 | Upload | `POST /upload/room-image`, `GET /upload/room-image/{id}` |
 | Health | `GET /healthz`, `GET /readyz` |
@@ -121,6 +121,35 @@ pytest tests/ -v
 Tests run against aiosqlite in-memory; Azure AI calls are served from deterministic
 mock mode (no credentials required). For real Azure integration tests, set
 `RUN_INTEGRATION=1` and valid Azure env vars.
+
+## Style catalog
+
+The editorial design-style templates (Mid-Century Modern, Boho Chic, …) live
+in the `styles` table. Migration `0004_styles` creates the table; the
+FastAPI lifespan auto-seeds it from
+`data/style_templates/templates.json` on first run (no-op if rows exist).
+
+To add new styles:
+
+```bash
+# 1. Drop the new image into data/style_templates/images/<file>.jpg
+# 2. Hit the admin endpoint:
+curl -X POST https://your.host/api/v1/styles/ \
+  -H "X-Admin-Key: $ADMIN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"My New Style","category":"Living Room","vibe":"…","description":"…","image_filename":"my_style.jpg","trending":false}'
+```
+
+Or batch from JSON: edit `templates.json`, add new entries with unique
+`id`s, then re-run:
+
+```bash
+python -m app.services.style_seed --upsert   # idempotent: insert + update
+python -m app.services.style_seed --reset    # WIPE the table first (destructive)
+```
+
+`ADMIN_API_KEY` (env var, generate with `openssl rand -hex 32`) gates
+the write endpoints. Empty / unset → admin endpoints return 503.
 
 ## Image storage
 

@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     MAX_IMAGE_BYTES: int = 5 * 1024 * 1024
     MAX_REQUEST_BYTES: int = 8 * 1024 * 1024
 
+    # Shared secret for protected admin operations (e.g. POST/PATCH/DELETE
+    # /styles/). Sent by the admin via the `X-Admin-Key` request header.
+    # Empty / unset → admin endpoints return 503 (disabled).
+    ADMIN_API_KEY: str = ""
+
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def _split_origins(cls, v):
