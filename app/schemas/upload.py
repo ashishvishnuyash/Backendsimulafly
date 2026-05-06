@@ -41,6 +41,16 @@ class VisualizeResponse(BaseModel):
     status: str = "pending"
 
 
+class MakeoverRequest(BaseModel):
+    """Open-ended room makeover — no specific product, just an optional
+    direction string. The AI restyles the existing room photo using the
+    direction + the session's accumulated context_summary."""
+
+    session_id: uuid.UUID
+    room_image_id: uuid.UUID
+    direction: str | None = Field(default=None, max_length=600)
+
+
 class VisualizeJobRef(BaseModel):
     """One entry in a multi-job response."""
 
