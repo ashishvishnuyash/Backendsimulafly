@@ -79,34 +79,35 @@ def _edit_prompt(product_title: str, placement: str | None) -> str:
 
 
 def _makeover_prompt(direction: str | None, room_summary: str | None) -> str:
-    """Open-ended makeover prompt — no specific product to insert. Uses the
-    user's direction (if any) and the session's accumulated context_summary
-    to restyle the existing room."""
-    base = (
+    """Open-ended makeover prompt — strictly direction-driven.
+
+    When the user supplies a direction, that is the sole stylistic input;
+    we deliberately do NOT mix in the session's chat-derived context_summary
+    because blending the two produced muddy, conflicting prompts. The room
+    summary is only used as a last-resort fallback if no direction was
+    provided.
+    """
+    cleaned = (direction or "").strip()
+    if cleaned:
+        intent = f"Restyling direction: {cleaned}"
+    elif room_summary:
+        intent = f"Restyling direction: {room_summary}"
+    else:
+        intent = "Restyling direction: a tasteful, modern, warmly lit makeover."
+
+    return (
         "You are a photorealistic interior-design compositor. "
-        "Restyle the provided room image into a complete makeover.\n"
+        "Restyle the provided room photo into a complete makeover.\n"
+        f"{intent}\n"
         "Rules you MUST follow:\n"
-        "  1. Preserve the room's overall geometry, perspective, camera angle, "
-        "and the position/size of architectural features (walls, windows, "
-        "doors, ceiling height).\n"
+        "  1. Preserve the room's overall geometry, perspective, camera "
+        "angle, and the position/size of architectural features "
+        "(walls, windows, doors, ceiling height).\n"
         "  2. You MAY change furniture, decor, colour palette, textiles, "
-        "lighting, and accessories to realise the requested direction.\n"
+        "lighting, and accessories to realise the direction above.\n"
         "  3. The result must look like a real photograph — accurate "
         "lighting, contact shadows, and material reflections.\n"
-    )
-    direction_line = (
-        f"  4. Direction from the user: {direction.strip()}\n"
-        if direction and direction.strip()
-        else ""
-    )
-    summary_line = (
-        f"  5. Existing room context: {room_summary}\n"
-        if room_summary
-        else ""
-    )
-    return (
-        base + direction_line + summary_line
-        + "Output: one photorealistic interior photograph, no text overlays, "
+        "Output: one photorealistic interior photograph, no text overlays, "
         "no watermarks."
     )[:3800]
 
