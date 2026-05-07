@@ -43,6 +43,11 @@ class ChatResponse(BaseModel):
     content: str
     ui_payload: dict[str, Any] | None = None
     created_at: datetime
+    # Set on the /chat/analyze response when a style was selected — points
+    # at the background image-gen job that's producing a styled makeover
+    # of the user's room. The client polls /visualize/{task_id} to know
+    # when the room_preview message lands in the session.
+    makeover_task_id: uuid.UUID | None = None
 
 
 class MessageOut(BaseModel):

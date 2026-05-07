@@ -30,7 +30,6 @@ from app.models.message import Message
 from app.models.product import Product
 from app.models.session import DesignSession
 from app.schemas.upload import (
-    MakeoverRequest,
     VisualizeJobOut,
     VisualizeJobRef,
     VisualizeMultiResponse,
@@ -76,40 +75,6 @@ def _edit_prompt(product_title: str, placement: str | None) -> str:
         f"  4. Product to place: {product_title}.{direction}\n"
         "Output: one photorealistic staging photograph, no text overlays, no watermarks."
     )
-
-
-def _makeover_prompt(direction: str | None, room_summary: str | None) -> str:
-    """Open-ended makeover prompt — strictly direction-driven.
-
-    When the user supplies a direction, that is the sole stylistic input;
-    we deliberately do NOT mix in the session's chat-derived context_summary
-    because blending the two produced muddy, conflicting prompts. The room
-    summary is only used as a last-resort fallback if no direction was
-    provided.
-    """
-    cleaned = (direction or "").strip()
-    if cleaned:
-        intent = f"Restyling direction: {cleaned}"
-    elif room_summary:
-        intent = f"Restyling direction: {room_summary}"
-    else:
-        intent = "Restyling direction: a tasteful, modern, warmly lit makeover."
-
-    return (
-        "You are a photorealistic interior-design compositor. "
-        "Restyle the provided room photo into a complete makeover.\n"
-        f"{intent}\n"
-        "Rules you MUST follow:\n"
-        "  1. Preserve the room's overall geometry, perspective, camera "
-        "angle, and the position/size of architectural features "
-        "(walls, windows, doors, ceiling height).\n"
-        "  2. You MAY change furniture, decor, colour palette, textiles, "
-        "lighting, and accessories to realise the direction above.\n"
-        "  3. The result must look like a real photograph — accurate "
-        "lighting, contact shadows, and material reflections.\n"
-        "Output: one photorealistic interior photograph, no text overlays, "
-        "no watermarks."
-    )[:3800]
 
 
 def _composite_prompt(
@@ -347,59 +312,6 @@ async def visualize(
         ).model_dump(mode="json")
 
 
-@router.post(
-    "/makeover",
-    response_model=VisualizeResponse,
-    status_code=status.HTTP_202_ACCEPTED,
-)
-@limiter.limit(f"{settings.IMAGE_GEN_RATE_LIMIT_PER_HOUR}/hour")
-async def visualize_makeover(
-    request: Request,
-    response: Response,
-    body: MakeoverRequest,
-    user: CurrentUser,
-    db: DBSession,
-) -> VisualizeResponse:
-    """Open-ended room makeover — no product selection required.
-
-    The AI restyles the user's room photo guided by an optional `direction`
-    string plus the session's accumulated `context_summary`. Returns a
-    standard task_id the client polls via GET /visualize/{task_id}; the
-    finished render is appended to the chat as a `room_preview` message,
-    same shape as a product visualize.
-    """
-    session_res = await db.execute(
-        select(DesignSession).where(
-            DesignSession.id == body.session_id, DesignSession.user_id == user.id
-        )
-    )
-    session = session_res.scalar_one_or_none()
-    if not session:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="session not found")
-
-    room_image = await get_owned(db, image_id=body.room_image_id, owner_id=user.id)
-    if not room_image:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="room image not found")
-
-    job = create_job(
-        user_id=user.id,
-        session_id=session.id,
-        product_id=None,
-        room_image_id=room_image.id,
-    )
-    asyncio.create_task(
-        _run_makeover(
-            job_id=job.id,
-            user_id=user.id,
-            session_id=session.id,
-            room_bytes=room_image.data,
-            room_summary=session.context_summary,
-            direction=body.direction,
-        )
-    )
-    return VisualizeResponse(task_id=job.id, status="pending")
-
-
 @router.get("/{task_id}", response_model=VisualizeJobOut)
 async def get_visualize_status(
     task_id: uuid.UUID, user: CurrentUser
@@ -523,47 +435,6 @@ async def _run_composite(
         )
     except Exception as e:
         log.exception("visualize.composite.failed", job_id=str(job_id), error=str(e))
-        mark_failed(job_id, str(e))
-
-
-async def _run_makeover(
-    *,
-    job_id: uuid.UUID,
-    user_id: uuid.UUID,
-    session_id: uuid.UUID,
-    room_bytes: bytes,
-    room_summary: str | None,
-    direction: str | None,
-) -> None:
-    """Open-ended makeover render. No product reference image — just the
-    room photo + a direction prompt + (when available) the session's
-    accumulated context summary."""
-    try:
-        ai = get_image_client()
-        prompt = _makeover_prompt(direction, room_summary)
-        log.info(
-            "visualize.makeover.start",
-            job_id=str(job_id),
-            has_direction=bool(direction),
-        )
-        png_bytes = await ai.image_edit(
-            room_bytes, None, prompt, fallback_prompt=prompt
-        )
-        caption = (
-            f"Here's your room reimagined — {direction.strip()}."
-            if direction and direction.strip()
-            else "Here's a fresh take on your room."
-        )
-        await _persist_and_mark_done(
-            job_id=job_id,
-            user_id=user_id,
-            session_id=session_id,
-            png_bytes=png_bytes,
-            caption=caption,
-            product_id=None,
-        )
-    except Exception as e:
-        log.exception("visualize.makeover.failed", job_id=str(job_id), error=str(e))
         mark_failed(job_id, str(e))
 
 

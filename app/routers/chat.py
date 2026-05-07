@@ -1,3 +1,4 @@
+import asyncio
 import base64
 import uuid
 
@@ -6,16 +7,26 @@ from langchain_core.messages import HumanMessage
 from sqlalchemy import select
 
 from app.core.config import get_settings
+from app.core.database import SessionLocal
+from app.core.logging import get_logger
 from app.core.rate_limit import limiter
 from app.models.message import Message
 from app.models.session import DesignSession
 from app.schemas.chat import ChatAnalyzeRequest, ChatRequest, ChatResponse, MessageOut
 from app.schemas.product import ProductOut
-from app.services.image_service import persist_base64
+from app.services.azure_ai_client import get_image_client
+from app.services.image_service import persist_base64, persist_image
 from app.services.llm import get_chat_llm
 from app.services.rag_service import run_rag_turn
 from app.services.user_profile_service import extract_and_update_profile
+from app.services.visualize_jobs import (
+    create_job,
+    mark_done,
+    mark_failed,
+)
 from app.utils.dependencies import CurrentUser, DBSession
+
+log = get_logger(__name__)
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 settings = get_settings()
@@ -105,12 +116,119 @@ async def analyze(
     await db.commit()
     await db.refresh(assistant_msg)
 
+    # If the user picked a style, kick off a background image-edit job that
+    # produces a styled makeover of their actual room photo. The result
+    # lands as a `room_preview` assistant message in this session; the
+    # client polls /visualize/{task_id} to know when to refresh.
+    makeover_task_id: uuid.UUID | None = None
+    if body.style_name:
+        job = create_job(
+            user_id=user.id,
+            session_id=session.id,
+            product_id=None,
+            room_image_id=image.id,
+        )
+        makeover_task_id = job.id
+        asyncio.create_task(
+            _run_style_makeover(
+                job_id=job.id,
+                user_id=user.id,
+                session_id=session.id,
+                room_bytes=image.data,
+                style_name=body.style_name,
+                style_vibe=body.style_vibe,
+            )
+        )
+
     return ChatResponse(
         message_id=assistant_msg.id,
         content=assistant_msg.content,
         ui_payload=None,
         created_at=assistant_msg.created_at,
+        makeover_task_id=makeover_task_id,
     )
+
+
+def _style_makeover_prompt(style_name: str, style_vibe: str | None) -> str:
+    """Builds a strict-room-makeover prompt for the first-turn auto-render.
+    Uses the picked style as the sole stylistic input — no chat history is
+    blended in (that's what produced muddy results in the prior makeover
+    iteration)."""
+    vibe_line = f" Vibe: {style_vibe.strip()}." if style_vibe else ""
+    return (
+        "You are a photorealistic interior-design compositor. "
+        "Restyle the provided room photo into a complete makeover.\n"
+        f"Restyling direction: '{style_name}'.{vibe_line}\n"
+        "Rules you MUST follow:\n"
+        "  1. Preserve the room's overall geometry, perspective, camera "
+        "angle, and the position/size of architectural features "
+        "(walls, windows, doors, ceiling height).\n"
+        "  2. You MAY change furniture, decor, colour palette, textiles, "
+        "lighting, and accessories to realise the direction above.\n"
+        "  3. The result must look like a real photograph — accurate "
+        "lighting, contact shadows, and material reflections.\n"
+        "Output: one photorealistic interior photograph, no text overlays, "
+        "no watermarks."
+    )[:3800]
+
+
+async def _run_style_makeover(
+    *,
+    job_id: uuid.UUID,
+    user_id: uuid.UUID,
+    session_id: uuid.UUID,
+    room_bytes: bytes,
+    style_name: str,
+    style_vibe: str | None,
+) -> None:
+    """Background worker: image-edit the room photo into the chosen style
+    and persist the result as a `room_preview` assistant message in the
+    session. Mirrors the single-product visualize flow, just product-less
+    and style-driven."""
+    try:
+        ai = get_image_client()
+        prompt = _style_makeover_prompt(style_name, style_vibe)
+        log.info(
+            "analyze.makeover.start",
+            job_id=str(job_id),
+            session_id=str(session_id),
+            style=style_name,
+        )
+        png_bytes = await ai.image_edit(
+            room_bytes, None, prompt, fallback_prompt=prompt
+        )
+        async with SessionLocal() as db:
+            generated = await persist_image(
+                db,
+                owner_id=user_id,
+                data=png_bytes,
+                media_type="image/png",
+                source="generated_preview",
+            )
+            assistant_msg = Message(
+                session_id=session_id,
+                role="assistant",
+                content=f"Here's your room reimagined in {style_name}.",
+                ui_payload={
+                    "type": "room_preview",
+                    "image_id": str(generated.id),
+                    "product_id": None,
+                },
+                image_id=generated.id,
+            )
+            db.add(assistant_msg)
+            await db.commit()
+            await db.refresh(assistant_msg)
+            mark_done(job_id, image_id=generated.id, message_id=assistant_msg.id)
+            log.info(
+                "analyze.makeover.done",
+                job_id=str(job_id),
+                image_id=str(generated.id),
+                bytes=len(png_bytes),
+            )
+    except Exception as e:
+        log.exception("analyze.makeover.failed", job_id=str(job_id), error=str(e))
+        mark_failed(job_id, str(e))
 
 
 @router.post("/", response_model=ChatResponse)
