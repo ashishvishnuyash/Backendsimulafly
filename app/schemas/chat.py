@@ -21,7 +21,14 @@ class ChatAnalyzeRequest(BaseModel):
 
 class ChatRequest(BaseModel):
     session_id: uuid.UUID
-    content: str = Field(min_length=1, max_length=4000)
+    # Either content or an image (or both) must be present — validated in
+    # the route handler. min_length is 0 here so callers can send a
+    # standalone image attachment without a text caption.
+    content: str = Field(default="", max_length=4000)
+    # Optional inline image — when set, the route persists it via
+    # /upload/room-image semantics and attaches it to the user message.
+    image_base64: str | None = Field(default=None, min_length=10)
+    media_type: str = Field(default="image/jpeg", max_length=64)
 
 
 class ProductCarouselPayload(BaseModel):

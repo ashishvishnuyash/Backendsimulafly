@@ -243,14 +243,44 @@ async def chat(
 ) -> ChatResponse:
     session = await _owned_session(db, body.session_id, user.id)
 
-    user_msg = Message(session_id=session.id, role="user", content=body.content)
+    # Validate: at least one of content or image must be provided.
+    has_content = bool(body.content and body.content.strip())
+    has_image = body.image_base64 is not None
+    if not has_content and not has_image:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="provide either text content or an image attachment",
+        )
+
+    # If an image is attached, persist it and store the resulting image id
+    # on the user message so the chat history can render the photo.
+    attached_image_id: uuid.UUID | None = None
+    if has_image:
+        image = await persist_base64(
+            db,
+            owner_id=user.id,
+            image_base64=body.image_base64,  # type: ignore[arg-type]
+            media_type=body.media_type,
+            source="upload",
+        )
+        attached_image_id = image.id
+
+    user_msg = Message(
+        session_id=session.id,
+        role="user",
+        content=body.content,
+        image_id=attached_image_id,
+    )
     db.add(user_msg)
     await db.flush()
 
+    # The RAG/LLM turn is text-only for now — vision integration on the
+    # follow-up turns is a separate feature. The image still gets persisted
+    # and shown in the chat history above.
     result = await run_rag_turn(
         db,
         session_id=session.id,
-        user_message=body.content,
+        user_message=body.content if has_content else "[user attached an image]",
         context_summary=session.context_summary,
         design_profile=user.design_profile or {},
     )
