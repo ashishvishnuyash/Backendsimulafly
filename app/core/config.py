@@ -27,6 +27,11 @@ class Settings(BaseSettings):
 
     ALLOWED_ORIGINS: Annotated[List[str], NoDecode] = ["*"]
 
+    # CSV of accepted Google OAuth client IDs (`aud` claim). For an Android
+    # app, include both the Android client ID and the Web client ID used as
+    # `serverClientId` from the Flutter client.
+    GOOGLE_CLIENT_IDS: Annotated[List[str], NoDecode] = []
+
     RATE_LIMIT_PER_MINUTE: int = 60
     CHAT_RATE_LIMIT_PER_MINUTE: int = 20
     IMAGE_GEN_RATE_LIMIT_PER_HOUR: int = 10
@@ -40,9 +45,9 @@ class Settings(BaseSettings):
     # Empty / unset → admin endpoints return 503 (disabled).
     ADMIN_API_KEY: str = ""
 
-    @field_validator("ALLOWED_ORIGINS", mode="before")
+    @field_validator("ALLOWED_ORIGINS", "GOOGLE_CLIENT_IDS", mode="before")
     @classmethod
-    def _split_origins(cls, v):
+    def _split_csv(cls, v):
         if isinstance(v, str):
             return [o.strip() for o in v.split(",") if o.strip()]
         return v
